@@ -3,6 +3,8 @@ const express = require("express");
 const corsMiddleWare = require("cors");
 const User = require("./models").user;
 const Space = require("./models").space;
+const Story = require("./models").story;
+const spaceRouter = require("./routers/space");
 
 //routers
 const authRouter = require("./routers/auth");
@@ -24,15 +26,10 @@ app.get("/users", async (req, res, next) => {
   const allusers = await User.findAll({ raw: true });
   res.send(allusers);
 });
-app.get("/spaces", async (req, res, next) => {
-  const allSpaces = await Space.findAll({
-    raw: true,
-    include: [User],
-  });
-  res.send(allSpaces);
-});
+
 //routes
 app.use("/auth", authRouter);
+app.use("/spaces", spaceRouter);
 
 //start listening
 app.listen(PORT, () => {
